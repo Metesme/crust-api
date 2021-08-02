@@ -3,7 +3,7 @@ import {ApiPromise, WsProvider} from '@polkadot/api';
 import {typesBundleForPolkadot} from '@crustio/type-definitions';
 import {blockHash, header, health} from './chain';
 import {register, reportWorks, workReport, code, identity} from './swork';
-import {file} from './market';
+import {file, fileBalance, storageOrder} from './market';
 import {loadKeyringPair, resHandler, withApiReady} from './util';
 import {logger} from '../log';
 
@@ -94,11 +94,21 @@ export const market = {
       res.json(await file(api, String(req.query['cid'])));
     }, next);
   },
+  fileBalance: (req: Request, res: Response, next: NextFunction) => {
+    withApiReady(async (api: ApiPromise) => {
+      res.json(await fileBalance(api));
+  }, next);
+},
+  storageOrder: (req: Request, res: Response, next: NextFunction) => {
+    withApiReady(async (api: ApiPromise) => {
+      res.json(await storageOrder(api,String(req.query['cid']),String(req.query['seeds']),Number(req.query['size'])));
+    }, next);
+  },
 };
 
 function newApiPromise(): ApiPromise {
   return new ApiPromise({
-    provider: new WsProvider(process.argv[3] || 'ws://localhost:9944'),
+    provider: new WsProvider(process.argv[3] || 'wss://api.decloudf.com/'),
     typesBundle: typesBundleForPolkadot,
   });
 }

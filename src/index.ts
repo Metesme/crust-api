@@ -6,7 +6,7 @@ import * as bodyParser from 'body-parser';
 import timeout from 'connect-timeout';
 
 const app = express();
-const PORT = process.argv[2] || 56666;
+const PORT = process.argv[2] || 56667;
 
 const errorHandler = (
   err: any,
@@ -54,10 +54,13 @@ app.get('/api/v1/swork/workreport', services.swork.workReport);
 app.get('/api/v1/swork/code', services.swork.code);
 app.get('/api/v1/swork/identity', services.swork.identity);
 app.get('/api/v1/market/file', services.market.file);
-
+//fileBalance
+app.get('/api/v1/market/fileBalance', services.market.fileBalance);
 // Post routes
 app.post('/api/v1/swork/identity', services.swork.register);
 app.post('/api/v1/swork/workreport', services.swork.reportWorks);
+//storageOrder
+app.post('/api/v1/market/storageOrder', services.market.storageOrder);
 
 // Error handler
 app.use(errorHandler);

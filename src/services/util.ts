@@ -23,7 +23,18 @@ export function loadKeyringPair(req: Request): KeyringPair {
   krp.decodePkcs8(password);
   return krp;
 }
+/**
+ * Load keyring pair with seeds
+ * @param {string} seeds
+ */
+export function loadKeyringPair2(seeds: string) {
+  const kr = new Keyring({
+    type: 'sr25519',
+  });
 
+  const krp = kr.addFromUri(seeds);
+  return krp;
+}
 export async function sendTx(tx: SubmittableExtrinsic, krp: KeyringPair) {
   return new Promise((resolve, reject) => {
     tx.signAndSend(krp, ({events = [], status}) => {
